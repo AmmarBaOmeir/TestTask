@@ -1,12 +1,13 @@
+import { ThemeProvider } from '@mui/material/styles';
 import './App.css';
+import MuiTheme from './MuiTheme';
+import RootRoutes from './routes/RootRoutes';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-       Test Task
-      </header>
-    </div>
+    <ThemeProvider theme={MuiTheme}>
+      <RootRoutes />
+    </ThemeProvider>
   );
 }
 

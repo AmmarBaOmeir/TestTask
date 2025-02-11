@@ -14,12 +14,12 @@ const StyledAalertBox = styled(Box)(({ theme }) => ({
 }));
 
 const AalertBox = (props) => {
-  const { title, description, switchProps } = props;
+  const { title, description, switchProps, width = '93%' } = props;
 
   const theme = useTheme();
 
   return (
-    <StyledAalertBox>
+    <StyledAalertBox sx={{ width }}>
       <Box>
         <Typography variant="h5">{title}</Typography>
         <Typography variant="body1" color={theme.palette.primary.contrastText}>

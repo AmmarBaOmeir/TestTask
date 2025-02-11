@@ -1,6 +1,7 @@
+import CommingSoonPage from '../../components/CommingSoonPage';
+
 const About = () => {
-    return <h1>Welcome to the About Page</h1>;
-  };
-  
-  export default About;
-  
+  return <CommingSoonPage title="About" />;
+};
+
+export default About;

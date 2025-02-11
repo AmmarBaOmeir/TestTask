@@ -24,25 +24,33 @@ const JobCardContainer = styled(Box)(({ theme, bgColor }) => ({
       ? theme.palette.border.darkGreen
       : theme.palette.border.default,
   padding: '24px 0',
+  margin: 0,
 }));
 
 const JobCardFavoriteIcon = styled(Box)(({ theme, active }) => ({
   borderRadius: '50%',
+  cursor: 'pointer',
   padding: '12px',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
   backgroundColor: active
-    ? theme.palette.background.lightGreen
+    ? theme.palette.background.darkGreen
     : theme.palette.background.default,
+  '& svg path': {
+    fill: active
+      ? theme.palette.primary.contrastText
+      : theme.palette.border.darkGreen,
+  },
   border: '1px solid',
   borderColor: active
-    ? theme.palette.border.darkGreen
-    : theme.palette.border.default,
+    ? theme.palette.border.default
+    : theme.palette.border.darkGreen,
 }));
 
 const JobCard = (props) => {
   const {
+    id,
     bgColor,
     title,
     companyName,
@@ -53,10 +61,12 @@ const JobCard = (props) => {
     postDate,
     badges,
     skills,
+    width = '100%',
   } = props;
+
   const theme = useTheme();
   return (
-    <JobCardContainer bgColor={bgColor}>
+    <JobCardContainer bgColor={bgColor} width={width}>
       {/* Card Header */}
       <Box
         sx={{
@@ -82,8 +92,11 @@ const JobCard = (props) => {
             </Typography>
           </Box>
         </Box>
-        <JobCardFavoriteIcon active={isFavorite} onClick={onFavoriteClick}>
-          <Favorite stroke={theme.palette.border.default} />
+        <JobCardFavoriteIcon
+          active={isFavorite}
+          onClick={() => onFavoriteClick(id)}
+        >
+          <Favorite />
         </JobCardFavoriteIcon>
       </Box>
 
@@ -126,7 +139,7 @@ const JobCard = (props) => {
       </Box>
       <Divider sx={{ margin: '24px 0' }} />
       {/* Card skills list */}
-      <Box sx={{ display: 'flex', padding: '0 32px' }}>
+      <Box sx={{ display: 'flex', gap: '12px', padding: '0 32px' }}>
         {skills.map((skill) => (
           <Typography variant="body1" color={theme.palette.grey[400]}>
             {skill}
@@ -140,6 +153,7 @@ const JobCard = (props) => {
 JobCard.prototype = {
   bgColor: PropTypes.oneOf(['green', 'white']),
   title: PropTypes.string,
+  id: PropTypes.string,
   companyName: PropTypes.string,
   companyAvatar: PropTypes.string,
   isFavorite: PropTypes.bool,

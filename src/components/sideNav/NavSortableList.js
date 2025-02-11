@@ -1,11 +1,14 @@
-import PropTypes from 'prop-types';
 import { useState } from 'react';
+import PropTypes from 'prop-types';
+import { Box } from '@mui/material';
 import { useDrag, useDrop } from 'react-dnd';
 import SideNavItem from './SideNavItem';
+import { trackNavs } from '../../apis/actions';
+import { useSideNavStore } from '../../store/useSideNavStore';
 
 const ItemType = 'ITEM';
 
-const SortableItem = ({ id, title, index, subItems, target, moveItem }) => {
+const SortableItem = ({ id, index, moveItem, ...rest }) => {
   const [, ref] = useDrag({
     type: ItemType,
     item: { id, index },
@@ -23,13 +26,7 @@ const SortableItem = ({ id, title, index, subItems, target, moveItem }) => {
 
   return (
     <div ref={(node) => ref(drop(node))}>
-      <SideNavItem
-        id={id}
-        title={title}
-        index={index}
-        subItems={subItems}
-        target={target}
-      />
+      <SideNavItem id={id} index={index} moveItem={moveItem} {...rest} />
     </div>
   );
 };
@@ -46,28 +43,31 @@ SortableItem.prototype = {
 const SortableList = (props) => {
   const { list } = props;
   const [items, setItems] = useState(list);
+  const {
+    sideNav: { setEditedNavs },
+  } = useSideNavStore();
 
   const moveItem = (fromIndex, toIndex) => {
     const newItems = [...items];
     const [movedItem] = newItems.splice(fromIndex, 1);
     newItems.splice(toIndex, 0, movedItem);
     setItems(newItems);
+    setEditedNavs(newItems);
+    trackNavs({ id: movedItem.id, from: fromIndex, to: toIndex });
   };
 
   return (
-    <div>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
       {items.map((item, index) => (
         <SortableItem
-          key={item.id}
-          subItems={item.children}
-          id={item.id}
-          title={item.title}
+          key={item?.id}
+          {...item}
+          subItems={item?.children}
           index={index}
-          target={item.target}
           moveItem={moveItem}
         />
       ))}
-    </div>
+    </Box>
   );
 };
 

@@ -8,6 +8,7 @@ import {
 } from '@mui/material';
 import PropTypes from 'prop-types';
 import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ReactComponent as ChevronUp } from '../../assets/chevronUp.svg';
 import { ReactComponent as ChevronDown } from '../../assets/chevronDown.svg';
 import { ReactComponent as SortDots } from '../../assets/sortDots.svg';
@@ -18,11 +19,12 @@ import { ReactComponent as CheckMark } from '../../assets/checkMark.svg';
 import { useSideNavStore } from '../../store/useSideNavStore';
 
 const SideNavItemContainer = styled(Box)(({ theme }) => ({
-  padding: '8px',
+  padding: '8px 10px',
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
   border: '1px solid',
+  cursor: 'pointer',
   borderColor: theme.palette.border.default,
   backgroundColor: theme.palette.background.paper,
 }));
@@ -66,33 +68,24 @@ const StyledAdornment = styled(InputAdornment)(({ theme }) => ({
   },
 }));
 
-const ExpandingIcon = ({ expanded, subItems }) => {
-  if (subItems?.length) {
-    return expanded ? ChevronUp : ChevronDown;
-  }
-  return null;
-};
-
-ExpandingIcon.prototype = {
-  expanded: PropTypes.bool,
-  subItems: PropTypes.arrayOf(PropTypes.shape()),
-};
-
 const SideNavItem = (props) => {
-  const { title, visible, target, subItems } = props;
-  const [fieldEdit, setFieldEdit] = useState(false);
-  const [expanded, setExpanded] = useState(false);
+  const { title, visible = true, target, subItems, id } = props;
+  const navigate = useNavigate();
+
+  const [isfieldEdit, setIsFieldEdit] = useState(false);
+  const [expanded, setExpanded] = useState(true);
   const [isVisible, setIsVisible] = useState(visible);
+  const [textValue, setTextValue] = useState(title);
 
   const longClickTimer = useRef(null);
 
   const {
-    sideNav: { viewMode, setViewMode },
+    sideNav: { viewMode, setViewMode, setEditedNavs, editedNavs },
   } = useSideNavStore();
 
   const handleMouseDown = () => {
     longClickTimer.current = setTimeout(() => {
-      setViewMode(true);
+      setViewMode(false);
     }, 500);
   };
 
@@ -103,7 +96,30 @@ const SideNavItem = (props) => {
     }
   };
 
+  const handleUpdateNavs = (key, value) => {
+    const updatedItems = editedNavs?.map((navItem) => {
+      if (navItem.id === id) {
+        return { ...navItem, [key]: value };
+      }
+      return {
+        ...navItem,
+        children: navItem?.children
+          ?.map((childNav) => {
+            if (childNav?.id === id) {
+              return { ...childNav, [key]: value };
+            }
+            return childNav;
+          })
+          .filter(Boolean),
+      };
+    });
+    setEditedNavs(updatedItems);
+  };
+
   const theme = useTheme();
+
+  const ExpandingIcon = expanded ? ChevronUp : ChevronDown;
+
   return (
     <Box
       onMouseDown={handleMouseDown}
@@ -116,16 +132,31 @@ const SideNavItem = (props) => {
       <SideNavItemContainer>
         <SideNavItemLeading>
           {!viewMode && <SortDots />}
-          <Typography variant="body1">{title}</Typography>
+          {!isfieldEdit && (
+            <Typography
+              variant="body1"
+              fontWeight="bold"
+              onClick={() => navigate(target)}
+            >
+              {textValue}
+            </Typography>
+          )}
         </SideNavItemLeading>
-        {fieldEdit && (
+        {isfieldEdit && (
           <SideNavItemTextInput
             size="small"
+            value={textValue}
+            onChange={(e) => setTextValue(e.target.value)}
             slotProps={{
               input: {
                 sx: { height: '100%' },
                 endAdornment: (
-                  <StyledAdornment onClick={() => setFieldEdit(false)}>
+                  <StyledAdornment
+                    onClick={() => {
+                      handleUpdateNavs('title', textValue);
+                      setIsFieldEdit(false);
+                    }}
+                  >
                     <CheckMark
                       width={25}
                       height={25}
@@ -141,32 +172,63 @@ const SideNavItem = (props) => {
           {viewMode ? (
             <ExpandingIcon
               cursor="pointer"
-              subItems={subItems}
               expanded={expanded}
+              onClick={() => setExpanded(!expanded)}
+              {...(!subItems?.length && { display: 'none' })}
             />
           ) : (
             <>
-              {!fieldEdit && (
-                <EditPen cursor="pointer" onClick={() => setFieldEdit(true)} />
+              {!isfieldEdit && (
+                <EditPen
+                  cursor="pointer"
+                  onClick={() => setIsFieldEdit(true)}
+                />
               )}
               {isVisible ? (
-                <EyeOn cursor="pointer" onClick={() => setIsVisible(false)} />
+                <EyeOn
+                  cursor="pointer"
+                  onClick={() => {
+                    handleUpdateNavs('visible', false);
+                    setIsVisible(false);
+                  }}
+                />
               ) : (
-                <EyeOff cursor="pointer" onClick={() => setIsVisible(true)} />
+                <EyeOff
+                  cursor="pointer"
+                  onClick={() => {
+                    handleUpdateNavs('visible', true);
+                    setIsVisible(true);
+                  }}
+                />
               )}
             </>
           )}
         </SideNavItemTrailing>
       </SideNavItemContainer>
-      <Box sx={{ ml: '6px' }}>
-        {expanded && subItems.map((item) => <SideNavItem {...item} />)}
-      </Box>
+      {expanded && !!subItems?.length && (
+        <Box
+          sx={{
+            ml: '24px',
+            mt: '8px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
+          }}
+        >
+          {viewMode
+            ? subItems
+                ?.filter((sub) => sub?.visible !== false)
+                ?.map((item) => <SideNavItem {...item} />)
+            : subItems.map((item) => <SideNavItem {...item} />)}
+        </Box>
+      )}
     </Box>
   );
 };
 
 SideNavItem.prototype = {
   visible: PropTypes.bool,
+  id: PropTypes.string,
   title: PropTypes.string,
   target: PropTypes.string,
   subItems: PropTypes.arrayOf(PropTypes.shape()),

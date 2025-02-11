@@ -1,5 +1,7 @@
+import CommingSoonPage from '../../components/CommingSoonPage';
+
 const Qualifications = () => {
-  return <h1>Welcome to the Qualifications Page</h1>;
+  return <CommingSoonPage title="Qualifications" />;
 };
 
 export default Qualifications;

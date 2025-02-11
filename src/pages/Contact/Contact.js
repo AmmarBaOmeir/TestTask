@@ -1,6 +1,7 @@
+import CommingSoonPage from '../../components/CommingSoonPage';
+
 const Contact = () => {
-    return <h1>Welcome to the Contact Page</h1>;
-  };
-  
-  export default Contact;
-  
+  return <CommingSoonPage title="Contact" />;
+};
+
+export default Contact;

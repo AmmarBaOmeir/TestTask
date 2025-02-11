@@ -1,5 +1,6 @@
 export const jobs = [
   {
+    id: 1,
     title: 'Gaming UI designer',
     companyName: 'Rockstar Games',
     companyAvatar: '#',
@@ -11,6 +12,7 @@ export const jobs = [
     skills: ['Creative / Design', 'IT / Software development', 'Gaming'],
   },
   {
+    id: 2,
     title: 'Senior UX designer',
     companyName: 'Egabi',
     companyAvatar: '#',
@@ -22,6 +24,7 @@ export const jobs = [
     skills: ['Creative / Design', 'IT / Software development'],
   },
   {
+    id: 3,
     title: 'React Frontend developer',
     companyName: 'Magara',
     companyAvatar: '#',

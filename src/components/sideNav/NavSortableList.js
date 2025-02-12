@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Box } from '@mui/material';
 import { useDrag, useDrop } from 'react-dnd';
@@ -54,13 +54,13 @@ const SortableList = (props) => {
     sideNav: { setEditedNavs },
   } = useSideNavStore();
 
-  const moveItem = (fromIndex, toIndex) => {
+  const moveItem = useCallback((fromIndex, toIndex) => {
     const newItems = [...items];
     const [movedItem] = newItems.splice(fromIndex, 1);
     newItems.splice(toIndex, 0, movedItem);
     setItems(newItems);
     setEditedNavs(newItems);
-  };
+  }, [])
 
   const onDrop = ({ oldIndex, newIndex, itemId }) => {
     trackNavs({ id: itemId, from: oldIndex, to: newIndex });

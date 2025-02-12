@@ -45,15 +45,7 @@ const MobileDashboard = () => {
           sx={{
             padding: '16px',
             backgroundColor: 'white',
-            maxHeight: '100%',
-            minWidth: '100%',
-            overflowY: 'auto',
-            position: 'absolute',
-            top: 0,
-            right: 0,
-            left: 0,
-            bottom: 0,
-            zIndex: 99,
+            height: 'fit-content',
           }}
         >
           <Box
@@ -102,6 +94,7 @@ const MobileDashboard = () => {
             title="UI Designer in Egypt"
             description="70 Job positions"
             switchProps={{ title: 'Set Alert' }}
+            isMobile
           />
 
           {jobs.map((job, index) => (

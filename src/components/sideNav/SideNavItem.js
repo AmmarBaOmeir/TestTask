@@ -7,7 +7,7 @@ import {
   useTheme,
 } from '@mui/material';
 import PropTypes from 'prop-types';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as ChevronUp } from '../../assets/chevronUp.svg';
 import { ReactComponent as ChevronDown } from '../../assets/chevronDown.svg';
@@ -119,6 +119,10 @@ const SideNavItem = (props) => {
   const theme = useTheme();
 
   const ExpandingIcon = expanded ? ChevronUp : ChevronDown;
+
+  useEffect(() => {
+    setTextValue(title);
+  }, [title]);
 
   return (
     <Box

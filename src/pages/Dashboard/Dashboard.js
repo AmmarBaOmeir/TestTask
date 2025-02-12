@@ -6,7 +6,7 @@ import { ReactComponent as ChevronDown } from '../../assets/chevronDown.svg';
 
 import { useEffect } from 'react';
 import { Box, Button, Container, Typography } from '@mui/material';
-import { getNavs } from '../../apis/actions';
+import { getNavs, postNavs } from '../../apis/actions';
 import { useSideNavStore } from '../../store/useSideNavStore';
 import SideNav from '../../components/sideNav/SideNav';
 
@@ -21,6 +21,7 @@ const Dashboard = () => {
         if (navList.length) {
           setNavs(navList);
           setEditedNavs(navList);
+          postNavs(navList);
         }
       });
     }
@@ -33,9 +34,8 @@ const Dashboard = () => {
           width: '30vw',
           padding: '16px',
           backgroundColor: 'white',
-          maxHeight: '80vh',
+          height: 'fit-content',
           minWidth: '400px',
-          overflowY: 'auto',
         }}
       >
         <Typography variant="body1" color="warning" mb={1}>

@@ -87,9 +87,10 @@ const JobCard = (props) => {
         >
           <Avatar src={companyAvatar} />
           <Box>
-            <Typography variant={isMobile ? 'h6' : 'h4'}>{title}</Typography>
+            <Typography variant={isMobile ? 'h6' : 'h4'} fontWeight="bold">{title}</Typography>
             <Typography
               variant={isMobile ? 'caption' : 'body1'}
+              fontWeight="bold"
               color={theme.palette.primary.main}
             >
               {companyName}

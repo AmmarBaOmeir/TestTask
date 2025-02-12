@@ -1,14 +1,25 @@
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { useMemo } from 'react';
+import { TouchBackend } from 'react-dnd-touch-backend';
 import { Box, Button } from '@mui/material';
 import NavSortableList from './NavSortableList';
 import SideNavItem from './SideNavItem';
 import { useSideNavStore } from '../../store/useSideNavStore';
-import { postNavs } from '../../apis/actions';
+import { getNavs, postNavs } from '../../apis/actions';
+import HTML5toTouch from '../../HTML5toTouch';
+import { MultiBackend } from 'react-dnd-multi-backend';
 
 const SideNav = () => {
   const {
-    sideNav: { viewMode, setViewMode, navs, setEditedNavs, editedNavs },
+    sideNav: {
+      viewMode,
+      setViewMode,
+      setNavs,
+      navs,
+      setEditedNavs,
+      editedNavs,
+    },
   } = useSideNavStore();
 
   if (viewMode) {
@@ -28,7 +39,7 @@ const SideNav = () => {
   }
 
   return (
-    <DndProvider backend={HTML5Backend}>
+    <DndProvider backend={MultiBackend} options={HTML5toTouch}>
       <NavSortableList list={navs} />
       <Box
         sx={{
@@ -53,7 +64,12 @@ const SideNav = () => {
           color="primary"
           onClick={() => {
             setViewMode(true);
-            postNavs(editedNavs);
+            postNavs(editedNavs).then(() => {
+              getNavs().then((navList) => {
+                setNavs(navList);
+                setEditedNavs(navList);
+              });
+            });
           }}
         >
           Save

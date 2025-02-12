@@ -11,7 +11,7 @@ const ItemType = 'ITEM';
 const SortableItem = ({ id, index, moveItem, ...rest }) => {
   const [, ref] = useDrag({
     type: ItemType,
-    item: { id, index },
+    item: { id, index, originalIndex: index },
   });
 
   const [, drop] = useDrop({
@@ -21,6 +21,12 @@ const SortableItem = ({ id, index, moveItem, ...rest }) => {
         moveItem(draggedItem.index, index);
         draggedItem.index = index;
       }
+    },
+    drop: (draggedItem) => {
+      const oldIndex = draggedItem.originalIndex;
+      const newIndex = draggedItem.index;
+      const itemId = draggedItem.id;
+      rest.onDrop({ oldIndex, newIndex, itemId });
     },
   });
 
@@ -36,6 +42,7 @@ SortableItem.prototype = {
   title: PropTypes.string,
   index: PropTypes.string,
   moveItem: PropTypes.func,
+  onDrop: PropTypes.func,
   subItems: PropTypes.arrayOf(PropTypes.shape()),
   target: PropTypes.string,
 };
@@ -53,7 +60,10 @@ const SortableList = (props) => {
     newItems.splice(toIndex, 0, movedItem);
     setItems(newItems);
     setEditedNavs(newItems);
-    trackNavs({ id: movedItem.id, from: fromIndex, to: toIndex });
+  };
+
+  const onDrop = ({ oldIndex, newIndex, itemId }) => {
+    trackNavs({ id: itemId, from: oldIndex, to: newIndex });
   };
 
   return (
@@ -65,6 +75,7 @@ const SortableList = (props) => {
           subItems={item?.children}
           index={index}
           moveItem={moveItem}
+          onDrop={onDrop}
         />
       ))}
     </Box>

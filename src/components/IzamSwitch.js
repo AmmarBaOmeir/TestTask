@@ -25,7 +25,7 @@ const CustomSwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-const CustomSwitchContainer = styled(Box)(({ theme }) => ({
+const CustomSwitchContainer = styled(Box)(() => ({
   display: 'flex',
   alignItems: 'center',
   gap: '10px',

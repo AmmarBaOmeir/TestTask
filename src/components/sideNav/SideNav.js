@@ -1,7 +1,4 @@
 import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { useMemo } from 'react';
-import { TouchBackend } from 'react-dnd-touch-backend';
 import { Box, Button } from '@mui/material';
 import NavSortableList from './NavSortableList';
 import SideNavItem from './SideNavItem';

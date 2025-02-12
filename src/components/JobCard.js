@@ -61,6 +61,7 @@ const JobCard = (props) => {
     postDate,
     badges,
     skills,
+    isMobile,
     width = '100%',
   } = props;
 
@@ -86,8 +87,11 @@ const JobCard = (props) => {
         >
           <Avatar src={companyAvatar} />
           <Box>
-            <Typography variant="h4">{title}</Typography>
-            <Typography variant="body1" color={theme.palette.primary.main}>
+            <Typography variant={isMobile ? 'h6' : 'h4'}>{title}</Typography>
+            <Typography
+              variant={isMobile ? 'caption' : 'body1'}
+              color={theme.palette.primary.main}
+            >
               {companyName}
             </Typography>
           </Box>
@@ -112,13 +116,19 @@ const JobCard = (props) => {
       >
         <Box sx={{ gap: '8px', display: 'flex', alignItems: 'center' }}>
           <MarkerPin stroke={theme.palette.grey[300]} />
-          <Typography variant="body1" color={theme.palette.grey[700]}>
+          <Typography
+            variant={isMobile ? 'caption' : 'body1'}
+            color={theme.palette.grey[700]}
+          >
             {jobAddress}
           </Typography>
         </Box>
         <Box sx={{ gap: '8px', display: 'flex', alignItems: 'center' }}>
           <Calendar stroke={theme.palette.grey[300]} />
-          <Typography variant="body1" color={theme.palette.grey[700]}>
+          <Typography
+            variant={isMobile ? 'caption' : 'body1'}
+            color={theme.palette.grey[700]}
+          >
             {postDate}
           </Typography>
         </Box>
@@ -134,14 +144,17 @@ const JobCard = (props) => {
         }}
       >
         {badges.map((badge) => (
-          <IzamBadge {...badge} bgColor="lightgrey" />
+          <IzamBadge {...badge} bgColor="lightgrey" isMobile />
         ))}
       </Box>
       <Divider sx={{ margin: '24px 0' }} />
       {/* Card skills list */}
       <Box sx={{ display: 'flex', gap: '12px', padding: '0 32px' }}>
         {skills.map((skill) => (
-          <Typography variant="body1" color={theme.palette.grey[400]}>
+          <Typography
+            variant={isMobile ? 'caption' : 'body1'}
+            color={theme.palette.grey[400]}
+          >
             {skill}
           </Typography>
         ))}

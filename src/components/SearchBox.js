@@ -5,6 +5,7 @@ import {
   styled,
   TextField,
 } from '@mui/material';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { ReactComponent as SearchIcon } from '../assets/search.svg';
 
@@ -37,13 +38,22 @@ const StyledAdornment = styled(Box)(({ theme }) => ({
 }));
 
 const SearchBox = (props) => {
-  const { size = 'medium', onChange, width } = props;
+  const { size = 'medium', onChange, width, clickableAdornment } = props;
+  const [showSearchBox, setShowSearchBox] = useState(false);
 
   const handleChange = debounce((textVal) => {
     if (onChange) {
       onChange(textVal);
     }
   }, 750);
+
+  if (clickableAdornment && !showSearchBox) {
+    return (
+      <StyledAdornment onClick={() => setShowSearchBox(true)}>
+        <SearchIcon width={20} height={20} fill="white" />
+      </StyledAdornment>
+    );
+  }
 
   return (
     <StyledSearchBox
@@ -55,7 +65,11 @@ const SearchBox = (props) => {
         input: {
           startAdornment: (
             <InputAdornment position="start">
-              <StyledAdornment>
+              <StyledAdornment
+                {...(clickableAdornment && {
+                  onClick: () => setShowSearchBox(false),
+                })}
+              >
                 <SearchIcon width={20} height={20} fill="white" />
               </StyledAdornment>
             </InputAdornment>
@@ -68,6 +82,7 @@ const SearchBox = (props) => {
 
 SearchBox.prototype = {
   onChange: PropTypes.func,
+  clickableAdornment: PropTypes.bool,
   size: PropTypes.oneOf(['small', 'medium']),
 };
 

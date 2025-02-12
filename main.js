@@ -57,8 +57,8 @@ app.get('/nav', (req, res) => {
         title: 'Qualifications',
         target: 'qualifications',
         children: [
-          { id: 14, title: 'Q1', target: '/q1' },
-          { id: 15, title: 'Q2', target: '/q2' },
+          { id: 14, title: 'Q1', target: '/qualifications/q1' },
+          { id: 15, title: 'Q2', target: '/qualifications/q2' },
         ],
       },
       { id: 5, title: 'About', target: '/about' },

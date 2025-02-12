@@ -1,4 +1,5 @@
 import { Box, styled } from '@mui/material';
+import { useLocation, useNavigate } from 'react-router-dom';
 import TopNavItem from './TopNavItem';
 import { ReactComponent as Home } from '../../assets/home.svg';
 import { ReactComponent as Job } from '../../assets/job.svg';
@@ -16,6 +17,9 @@ const CustomTopNav = styled(Box)(({ theme }) => ({
 }));
 
 const TopNav = () => {
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+
   return (
     <CustomTopNav>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
@@ -28,8 +32,16 @@ const TopNav = () => {
         <SearchBox width="360px" />
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-        <TopNavItem label="Home" icon={<Home />} />
-        <TopNavItem label="Jobs" icon={<Job />} active />
+        <TopNavItem
+          label="Home"
+          icon={<Home onClick={() => navigate('/')} />}
+          active={pathname === '/'}
+        />
+        <TopNavItem
+          label="Jobs"
+          icon={<Job onClick={() => navigate('jobs')} />}
+          active={pathname.includes('/jobs')}
+        />
       </Box>
     </CustomTopNav>
   );

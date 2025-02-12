@@ -16,7 +16,7 @@ const MobileTopNav = () => {
   return (
     <CustomMobileTopNav>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-        <Avatar />
+        <Avatar sx={{ cursor: 'pointer' }} />
         <SearchBox width="200px" clickableAdornment />
       </Box>
       <Box

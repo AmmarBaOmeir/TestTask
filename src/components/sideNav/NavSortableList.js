@@ -60,7 +60,7 @@ const SortableList = (props) => {
     newItems.splice(toIndex, 0, movedItem);
     setItems(newItems);
     setEditedNavs(newItems);
-  }, [])
+  }, []);
 
   const onDrop = ({ oldIndex, newIndex, itemId }) => {
     trackNavs({ id: itemId, from: oldIndex, to: newIndex });

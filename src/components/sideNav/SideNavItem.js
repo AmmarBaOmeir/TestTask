@@ -1,5 +1,6 @@
 import {
   Box,
+  Collapse,
   InputAdornment,
   styled,
   TextField,
@@ -209,22 +210,24 @@ const SideNavItem = (props) => {
           )}
         </SideNavItemTrailing>
       </SideNavItemContainer>
-      {expanded && !!subItems?.length && (
-        <Box
-          sx={{
-            ml: '24px',
-            mt: '8px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '8px',
-          }}
-        >
-          {viewMode
-            ? subItems
-                ?.filter((sub) => sub?.visible !== false)
-                ?.map((item) => <SideNavItem {...item} />)
-            : subItems.map((item) => <SideNavItem {...item} />)}
-        </Box>
+      {!!subItems?.length && (
+        <Collapse in={expanded} timeout={400} unmountOnExit>
+          <Box
+            sx={{
+              ml: '24px',
+              mt: '8px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px',
+            }}
+          >
+            {viewMode
+              ? subItems
+                  ?.filter((sub) => sub?.visible !== false)
+                  ?.map((item) => <SideNavItem {...item} />)
+              : subItems.map((item) => <SideNavItem {...item} />)}
+          </Box>
+        </Collapse>
       )}
     </Box>
   );

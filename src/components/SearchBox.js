@@ -1,5 +1,6 @@
 import {
   Box,
+  Collapse,
   debounce,
   InputAdornment,
   styled,
@@ -30,6 +31,7 @@ const StyledAdornment = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.background.darkGreen,
   color: theme.palette.primary.contrastText,
   display: 'flex',
+  cursor: 'pointer',
   alignItems: 'center',
   justifyContent: 'center',
   borderRadius: '50%',
@@ -47,36 +49,40 @@ const SearchBox = (props) => {
     }
   }, 750);
 
-  if (clickableAdornment && !showSearchBox) {
-    return (
-      <StyledAdornment onClick={() => setShowSearchBox(true)}>
-        <SearchIcon width={20} height={20} fill="white" />
-      </StyledAdornment>
-    );
-  }
-
   return (
-    <StyledSearchBox
-      placeholder="Search by name, job title"
-      size={size}
-      onChange={handleChange}
-      width={width}
-      slotProps={{
-        input: {
-          startAdornment: (
-            <InputAdornment position="start">
-              <StyledAdornment
-                {...(clickableAdornment && {
-                  onClick: () => setShowSearchBox(false),
-                })}
-              >
-                <SearchIcon width={20} height={20} fill="white" />
-              </StyledAdornment>
-            </InputAdornment>
-          ),
-        },
-      }}
-    />
+    <>
+      {!showSearchBox && clickableAdornment ? (
+        <Collapse in={!showSearchBox} timeout={300} unmountOnExit>
+          <StyledAdornment onClick={() => setShowSearchBox(true)}>
+            <SearchIcon width={20} height={20} fill="white" />
+          </StyledAdornment>
+        </Collapse>
+      ) : null}
+
+      <Collapse in={showSearchBox} timeout={300} unmountOnExit>
+        <StyledSearchBox
+          placeholder="Search by name, job title"
+          size={size}
+          onChange={handleChange}
+          width={width}
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <StyledAdornment
+                    {...(clickableAdornment && {
+                      onClick: () => setShowSearchBox(false),
+                    })}
+                  >
+                    <SearchIcon width={20} height={20} fill="white" />
+                  </StyledAdornment>
+                </InputAdornment>
+              ),
+            },
+          }}
+        />
+      </Collapse>
+    </>
   );
 };
 

@@ -21,7 +21,9 @@ const AalertBox = (props) => {
   return (
     <StyledAalertBox sx={{ width }}>
       <Box>
-        <Typography variant={isMobile ? 'h6' : "h5"} fontWeight="bold">{title}</Typography>
+        <Typography variant={isMobile ? 'h6' : 'h5'} fontWeight="bold">
+          {title}
+        </Typography>
         <Typography variant="body1" color={theme.palette.primary.contrastText}>
           {description}
         </Typography>

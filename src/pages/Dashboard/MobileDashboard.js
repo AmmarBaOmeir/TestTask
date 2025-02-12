@@ -8,7 +8,9 @@ import { useEffect, useState } from 'react';
 import {
   Box,
   Container,
+  Fade,
   Pagination,
+  Slide,
   Typography,
   useTheme,
 } from '@mui/material';
@@ -40,7 +42,12 @@ const MobileDashboard = () => {
 
   return (
     <Container sx={{ padding: '2rem' }}>
-      {isMenuExpanded && (
+      <Slide
+        in={isMenuExpanded}
+        timeout={300}
+        unmountOnExit
+        direction={isMenuExpanded ? 'right' : 'top'}
+      >
         <Box
           sx={{
             padding: '16px',
@@ -57,13 +64,15 @@ const MobileDashboard = () => {
               mb: '12px',
             }}
           >
-            <ArrowLeft onClick={() => setIsMenuExpanded(false)} />
+            <ArrowLeft
+              cursor="pointer"
+              onClick={() => setIsMenuExpanded(false)}
+            />
           </Box>
-
           <SideNav />
         </Box>
-      )}
-      {!isMenuExpanded && (
+      </Slide>
+      <Fade in={!isMenuExpanded} timeout={500} unmountOnExit>
         <Box
           sx={{
             display: 'flex',
@@ -88,6 +97,7 @@ const MobileDashboard = () => {
               height={40}
               style={{ position: 'absolute', right: '10px', top: '12px' }}
               onClick={() => setIsMenuExpanded(true)}
+              cursor="pointer"
             />
           </Box>
           <AalertBox
@@ -121,7 +131,7 @@ const MobileDashboard = () => {
             <Pagination count={3} variant="outlined" shape="rounded" />
           </Box>
         </Box>
-      )}
+      </Fade>
     </Container>
   );
 };
